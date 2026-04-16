@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eldor SOP - Digital Management System</title>
+    <title>Eldor SOP - Dijital Yönetim Sistemi</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -65,8 +65,6 @@
         #loginScreen { background: linear-gradient(135deg, #000080 0%, #000044 100%); position: fixed; inset: 0; z-index: 8000; }
         
         #operatorView { position: fixed; inset: 0; background: #f1f5f9; z-index: 9000; overflow-y: auto; display: none; }
-        .step-card.completed { opacity: 0.6; border-left: 4px solid #22c55e; background: #f8fafc; }
-        .step-highlight { ring: 4px; ring-color: #000080; background: #f0f4ff !important; }
 
         .archive-item-btn { transition: all 0.2s; }
         .archive-item-btn:hover { background-color: #f1f5f9; }
@@ -74,7 +72,7 @@
 </head>
 <body>
 
-    <!-- Operatör Dijital Arayüzü -->
+    <!-- Operatör Görünümü -->
     <div id="operatorView" class="flex flex-col">
         <header class="bg-[#000080] text-white p-4 sticky top-0 z-50 flex items-center justify-between shadow-lg">
             <div class="flex items-center gap-3">
@@ -89,8 +87,6 @@
             </button>
         </header>
 
-        <div id="opWarnings" class="hidden"></div>
-
         <main class="p-4 space-y-6 max-w-2xl mx-auto w-full">
             <div id="opMedia" class="space-y-4"></div>
             <div class="space-y-3">
@@ -100,7 +96,7 @@
                 <div id="opStepsList" class="space-y-3"></div>
             </div>
         </main>
-        <footer class="p-8 text-center text-slate-400 text-[10px] uppercase font-bold tracking-[0.2em]">ELDOR DIGITAL SOP SYSTEM &copy; 2026</footer>
+        <footer class="p-8 text-center text-slate-400 text-[10px] uppercase font-bold tracking-[0.2em]">ELDOR DİJİTAL SOP SİSTEMİ &copy; 2026</footer>
     </div>
 
     <!-- Giriş Ekranı -->
@@ -110,7 +106,7 @@
                 <div class="w-20 h-20 bg-blue-50 rounded-2xl mx-auto flex items-center justify-center mb-4">
                     <i data-lucide="shield-check" class="w-10 h-10 text-[#000080]"></i>
                 </div>
-                <h2 class="text-3xl font-bold text-slate-900">Eldor SOP Panel</h2>
+                <h2 class="text-3xl font-bold text-slate-900">Eldor SOP Paneli</h2>
                 <p class="text-slate-500">Dijital Standart Operasyon Prosedürleri</p>
             </div>
             <form id="loginForm" class="space-y-5">
@@ -122,10 +118,10 @@
         </div>
     </div>
 
-    <!-- Yükleme Ekranı -->
+    <!-- Yükleme Göstergesi -->
     <div id="loading" class="loading-overlay">
         <div class="w-14 h-14 border-4 border-[#000080] border-t-transparent rounded-full animate-spin mb-4"></div>
-        <p class="font-bold text-[#000080] text-lg" id="loadingText">Yükleniyor...</p>
+        <p class="font-bold text-[#000080] text-lg" id="loadingText">İşleniyor...</p>
     </div>
 
     <!-- Silme Onay Modalı -->
@@ -135,7 +131,7 @@
                 <i data-lucide="trash-2" class="w-8 h-8"></i>
             </div>
             <h3 class="text-xl font-bold mb-2 text-slate-900">Emin misiniz?</h3>
-            <p class="text-slate-500 mb-8 text-sm">Bu işlem dokümanı bulut arşivinden kalıcı olarak silecektir.</p>
+            <p class="text-slate-500 mb-8 text-sm">Bu işlem dokümanı ve bağlı tüm dosyaları bulut arşivinden tamamen silecektir.</p>
             <div class="flex gap-3">
                 <button id="confirmCancel" class="flex-grow py-4 bg-slate-100 text-slate-700 rounded-2xl font-bold">İptal</button>
                 <button id="confirmDelete" class="flex-grow py-4 bg-red-600 text-white rounded-2xl font-bold shadow-lg shadow-red-200">Sil</button>
@@ -143,7 +139,7 @@
         </div>
     </div>
 
-    <!-- Paylaşım Modalı -->
+    <!-- Paylaşım / Bildirim Modalı -->
     <div id="customModal" class="fixed inset-0 bg-black/60 z-[9500] hidden items-center justify-center p-4 backdrop-blur-md">
         <div class="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl text-center">
             <h3 id="modalTitle" class="text-2xl font-bold mb-3 text-slate-900">Paylaş</h3>
@@ -153,14 +149,11 @@
                 <p id="qrTitleText" class="font-bold text-[#000080] text-xs w-[200px] mx-auto text-center mb-4 uppercase"></p>
                 <div class="flex flex-col gap-2">
                     <button id="openLinkBtn" class="w-full py-3 bg-blue-600 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2">
-                        <i data-lucide="play" class="w-4 h-4"></i> Görünümü Test Et
+                        <i data-lucide="play" class="w-4 h-4"></i> Görünümü Simüle Et
                     </button>
                     <div class="flex gap-2">
                         <button id="downloadQrBtn" class="flex-grow py-3 bg-[#000080] text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2">
                             <i data-lucide="download" class="w-4 h-4"></i> QR Kaydet
-                        </button>
-                        <button id="copyLinkBtn" class="p-3 bg-white border border-slate-200 rounded-xl text-[#000080]">
-                            <i data-lucide="copy" class="w-4 h-4"></i>
                         </button>
                     </div>
                 </div>
@@ -169,50 +162,31 @@
         </div>
     </div>
 
-    <!-- Kırpma Modalı -->
-    <div id="cropModal" class="fixed inset-0 bg-black/80 z-[9600] hidden items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-white rounded-3xl max-w-4xl w-full flex flex-col max-h-[90vh]">
-            <div class="p-6 border-b flex items-center justify-between">
-                <h3 class="text-xl font-bold">Görseli Düzenle</h3>
-                <button onclick="closeCropModal()"><i data-lucide="x"></i></button>
-            </div>
-            <div class="flex-grow overflow-hidden p-6 bg-slate-100 flex items-center justify-center">
-                <img id="cropModalImage" src="" alt="Crop" style="max-width: 100%;">
-            </div>
-            <div class="p-6 border-t flex items-center justify-end gap-4">
-                <button onclick="closeCropModal()" class="px-6 py-3 font-bold text-slate-500">İptal</button>
-                <button onclick="applyCrop()" class="px-8 py-3 bg-[#000080] text-white rounded-xl font-bold">Uygula</button>
-            </div>
-        </div>
-    </div>
-
     <!-- Yönetim Uygulaması -->
     <div class="app-container opacity-0 pointer-events-none transition-opacity duration-700" id="mainApp">
         <aside id="sidebar" class="sidebar">
             <div class="p-6 border-b flex items-center justify-between bg-slate-50/50">
                 <div class="flex items-center gap-3 center-on-collapse">
-                    <div id="sidebarToggle" class="w-8 h-8 bg-[#000080] rounded-lg flex items-center justify-center cursor-pointer shadow-lg active:scale-95 transition-transform" title="Arşiv Panelini Aç/Kapat">
+                    <div id="sidebarToggle" class="w-8 h-8 bg-[#000080] rounded-lg flex items-center justify-center cursor-pointer shadow-lg active:scale-95 transition-transform" title="Arşivi Kapat/Aç">
                         <i data-lucide="layers" class="w-4 h-4 text-white"></i>
                     </div>
                     <h2 class="font-bold text-slate-800 tracking-tight hide-on-collapse">SOP Arşivi</h2>
                 </div>
-                <button id="refreshArchiveBtn" class="p-2 hover:bg-slate-200 rounded-lg text-slate-500 hide-on-collapse" title="Arşivi Yenile"><i data-lucide="rotate-cw" class="w-4 h-4"></i></button>
+                <button id="refreshArchiveBtn" class="p-2 hover:bg-slate-200 rounded-lg text-slate-500 hide-on-collapse" title="Yenile"><i data-lucide="rotate-cw" class="w-4 h-4"></i></button>
             </div>
             <div id="archiveSidebarList" class="flex-grow overflow-y-auto p-2 space-y-1"></div>
             <div class="p-4 border-t bg-white">
                 <div class="bg-blue-50 p-3 rounded-xl flex items-center gap-3 center-on-collapse">
                     <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-xs italic shrink-0">E</div>
                     <div class="hide-on-collapse">
-                        <p class="text-[11px] font-bold text-slate-700 uppercase">Eldor Yönetici</p>
-                        <p class="text-[9px] text-slate-400 uppercase tracking-widest font-bold">Çevrimiçi</p>
+                        <p class="text-[11px] font-bold text-slate-700 uppercase">Yönetici</p>
+                        <p class="text-[9px] text-slate-400 uppercase tracking-widest font-bold">Aktif</p>
                     </div>
                 </div>
             </div>
         </aside>
 
         <main class="main-content">
-            <button id="mobileMenuBtn" class="md:hidden fixed bottom-6 left-6 z-[60] w-12 h-12 bg-[#000080] text-white rounded-full flex items-center justify-center"><i data-lucide="menu"></i></button>
-
             <div class="max-w-5xl mx-auto space-y-6">
                 <!-- Üst Kontroller -->
                 <div class="flex flex-col md:flex-row items-center gap-6 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
@@ -227,7 +201,6 @@
                     </div>
                     <div class="flex flex-col gap-2 shrink-0">
                         <div class="flex bg-[#000080] rounded-xl shadow-lg overflow-hidden h-11">
-                            <button id="exportPdfBtn" class="px-5 text-xs text-white font-bold hover:bg-[#000066] border-r border-[#ffffff22] flex items-center gap-2"><i data-lucide="file-text" class="w-3.5 h-3.5"></i> PDF</button>
                             <button id="exportSupabaseBtn" class="px-5 text-xs text-white font-bold hover:bg-[#000066] flex items-center gap-2"><i data-lucide="cloud-upload" class="w-3.5 h-3.5"></i> KAYDET & QR</button>
                         </div>
                         <button id="resetBtn" class="text-[10px] text-red-500 font-bold hover:underline text-right px-2 uppercase">FORMU TEMİZLE</button>
@@ -247,44 +220,19 @@
                                 <input type="file" id="fileInput" class="hidden" accept="image/*">
                             </div>
                             <div id="editorArea" class="hidden space-y-4">
-                                <div class="flex flex-wrap items-center justify-between gap-3 bg-slate-50 p-3 rounded-xl border">
-                                    <div class="flex gap-1.5">
-                                        <button id="toolRed" class="tool-btn active p-2 rounded-lg border bg-white shadow-sm" title="Adım İşaretleyici"><div class="w-4 h-4 rounded-full bg-red-500"></div></button>
-                                        <button id="toolBlue" class="tool-btn p-2 rounded-lg border bg-white shadow-sm" title="Mavi Bilgi"><div class="w-4 h-4 rounded-full bg-blue-500"></div></button>
-                                        <button id="toolGreen" class="tool-btn p-2 rounded-lg border bg-white shadow-sm" title="Yeşil Onay"><div class="w-4 h-4 rounded-full bg-green-500"></div></button>
-                                        <button id="toolArrow" class="tool-btn p-2 rounded-lg border bg-white shadow-sm" title="Ok Çizimi"><i data-lucide="arrow-up-right" class="w-4 h-4 text-slate-600"></i></button>
-                                        <button id="toolOperator" class="tool-btn p-2 rounded-lg border bg-white shadow-sm" title="Operatör Pozisyonu"><i data-lucide="user" class="w-4 h-4 text-slate-600"></i></button>
-                                    </div>
-                                    <div class="flex gap-2">
-                                        <button onclick="openCropModal()" class="px-3 py-2 text-[11px] font-bold text-blue-600 bg-white border rounded-lg">Kırp</button>
-                                        <button onclick="clearCurrentImage()" class="px-3 py-2 text-[11px] font-bold text-red-600 bg-white border rounded-lg">Sil</button>
-                                    </div>
-                                </div>
                                 <div class="canvas-container" id="canvasContainer">
                                     <canvas id="mainCanvas"></canvas>
                                     <div id="markersOverlay" class="absolute inset-0 pointer-events-none"></div>
                                 </div>
+                                <button onclick="clearCurrentImage()" class="px-3 py-2 text-[11px] font-bold text-red-600 bg-white border rounded-lg">Görseli Sil</button>
                             </div>
                         </div>
                     </div>
-
                     <div class="space-y-6">
-                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm h-[400px] flex flex-col">
-                            <div class="flex items-center justify-between mb-4">
-                                <h3 class="font-extrabold text-[#000080] text-[11px] uppercase tracking-wider flex items-center gap-2"><i data-lucide="list" class="w-3 h-3"></i> ADIM LİSTESİ</h3>
-                                <button id="addManualBtn" class="bg-blue-600 text-white text-[10px] px-2.5 py-1.5 rounded-lg font-bold shadow-sm">+ Manuel</button>
-                            </div>
-                            <div class="flex-grow overflow-auto pr-1">
-                                <table class="w-full text-xs text-left divide-y divide-slate-100">
-                                    <tbody id="tableBody"></tbody>
-                                </table>
-                                <div id="emptyTableState" class="text-center py-10 text-slate-300 text-[10px]">Henüz adım yok.</div>
-                            </div>
-                        </div>
-                        <div class="bg-white p-5 rounded-2xl border border-red-50 shadow-sm">
-                            <h3 class="font-bold text-red-600 text-[11px] uppercase mb-4 flex items-center gap-2"><i data-lucide="alert-circle" class="w-3 h-3"></i> KRİTİK UYARILAR</h3>
-                            <div id="warningsContainer" class="space-y-2"></div>
-                            <button id="addWarningBtn" class="mt-4 w-full py-2.5 border-2 border-dashed border-red-100 text-red-300 text-[10px] rounded-xl font-bold hover:bg-red-50 hover:text-red-500">+ Uyarı Ekle</button>
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm min-h-[300px]">
+                            <h3 class="font-extrabold text-[#000080] text-[11px] uppercase tracking-wider mb-4">ADIM LİSTESİ</h3>
+                            <div id="tableBody" class="space-y-2"></div>
+                            <div id="emptyTableState" class="text-center py-10 text-slate-300 text-[10px]">Henüz adım yok.</div>
                         </div>
                     </div>
                 </div>
@@ -299,17 +247,12 @@
         const BASE_URL = window.location.href.split('?')[0].includes('blob') ? '' : window.location.href.split('?')[0];
 
         let supabaseClient = null;
-        let cropper = null;
         let deleteTargetFile = null;
         
         window.activeIdx = 0; 
         window.images = [null, null]; 
-        window.companyLogo = null;
         window.points = []; 
-        window.arrows = [];
-        window.warnings = []; 
         window.currentMode = 'red'; 
-        window.tempArrowStart = null;
         
         const ADMIN_U = "eldor", ADMIN_P = "eldor123";
 
@@ -330,7 +273,6 @@
             markersOverlay: document.getElementById('markersOverlay'),
             tableBody: document.getElementById('tableBody'),
             emptyTableState: document.getElementById('emptyTableState'),
-            warningsContainer: document.getElementById('warningsContainer'),
             sopTitleInput: document.getElementById('sopTitleInput'),
             sopSubtitleInput: document.getElementById('sopSubtitleInput'),
             logoPreview: document.getElementById('logoPreview'),
@@ -341,28 +283,16 @@
             confirmModal: document.getElementById('confirmModal'),
             confirmDelete: document.getElementById('confirmDelete'),
             confirmCancel: document.getElementById('confirmCancel'),
-            cropModal: document.getElementById('cropModal'),
-            cropModalImage: document.getElementById('cropModalImage'),
             modalTitle: document.getElementById('modalTitle'),
             modalMessage: document.getElementById('modalMessage'),
             qrSection: document.getElementById('qrSection'),
             qrContainer: document.getElementById('qrContainer'),
             qrTitleText: document.getElementById('qrTitleText'),
-            exportPdfBtn: document.getElementById('exportPdfBtn'),
             exportSupabaseBtn: document.getElementById('exportSupabaseBtn'),
-            downloadQrBtn: document.getElementById('downloadQrBtn'),
-            copyLinkBtn: document.getElementById('copyLinkBtn'),
-            openLinkBtn: document.getElementById('openLinkBtn'),
             resetBtn: document.getElementById('resetBtn'),
-            addManualBtn: document.getElementById('addManualBtn'),
-            addWarningBtn: document.getElementById('addWarningBtn'),
-            toolBtns: {
-                red: document.getElementById('toolRed'),
-                blue: document.getElementById('toolBlue'),
-                green: document.getElementById('toolGreen'),
-                arrow: document.getElementById('toolArrow'),
-                operator: document.getElementById('toolOperator')
-            },
+            modalClose: document.getElementById('modalClose'),
+            openLinkBtn: document.getElementById('openLinkBtn'),
+            downloadQrBtn: document.getElementById('downloadQrBtn'),
             tabBtns: [document.getElementById('tab0'), document.getElementById('tab1')]
         };
 
@@ -376,139 +306,167 @@
                 const params = new URLSearchParams(window.location.search);
                 const viewId = params.get('view');
                 if (viewId) {
-                    if (els.loginScreen) els.loginScreen.classList.add('hidden');
+                    els.loginScreen.classList.add('hidden');
                     loadOperatorSop(viewId);
                 }
                 if (typeof lucide !== 'undefined') lucide.createIcons();
                 toggleLoading(false);
-            } catch (err) { console.error("Başlatma Hatası:", err); }
+            } catch (err) { console.error("Başlatma hatası:", err); }
         }
 
         function toggleLoading(show, text = "İşleniyor...") {
             if (!els.loading) return;
             els.loadingText.innerText = text;
-            if (show) els.loading.classList.add('active');
-            else els.loading.classList.remove('active');
+            els.loading.classList.toggle('active', show);
         }
 
-        if (els.sidebarToggle) {
-            els.sidebarToggle.onclick = () => els.sidebar.classList.toggle('collapsed');
-        }
-
-        // --- SİLME MANTIK GÜNCELLEMESİ ---
-        function showDeleteConfirm(fileName) {
-            deleteTargetFile = fileName;
-            if (els.confirmModal) {
-                els.confirmModal.classList.remove('hidden');
-                els.confirmModal.classList.add('flex');
-            }
-        }
-
-        if (els.confirmCancel) {
-            els.confirmCancel.onclick = () => {
-                deleteTargetFile = null;
-                els.confirmModal.classList.add('hidden');
-                els.confirmModal.classList.remove('flex');
-            };
-        }
-
-        if (els.confirmDelete) {
-            els.confirmDelete.onclick = async () => {
-                if (!deleteTargetFile) return;
-                els.confirmModal.classList.add('hidden');
-                els.confirmModal.classList.remove('flex');
-                await deleteSopFile(deleteTargetFile);
-                deleteTargetFile = null;
-            };
-        }
-
-        async function deleteSopFile(fileName) {
-            toggleLoading(true, "Arşivden siliniyor...");
-            try {
-                // Supabase Storage yollarını hazırla
-                const jsonPath = `public/data/${fileName}`;
-                const pdfPath = `public/pdfs/${fileName.replace('.json', '.pdf')}`;
-                
-                // Supabase Storage .remove() hata kontrolü ile çağıralım
-                const { error: errorJson } = await supabaseClient.storage.from(BUCKET_NAME).remove([jsonPath]);
-                if (errorJson) {
-                    console.error("JSON silme hatası:", errorJson);
-                }
-
-                const { error: errorPdf } = await supabaseClient.storage.from(BUCKET_NAME).remove([pdfPath]);
-                if (errorPdf) {
-                    console.warn("PDF dosyası silinemedi (belki henüz oluşturulmadı):", errorPdf);
-                }
-
-                // Silme denemesinden sonra arşivi mutlaka yenile
-                await fetchArchive();
-                toggleLoading(false);
-            } catch (err) {
-                console.error("Genel silme hatası:", err);
-                toggleLoading(false);
-                alert("Bulut bağlantısında bir hata oluştu. Lütfen tekrar deneyin.");
-            }
-        }
-
-        async function fetchArchive() {
-            if (!supabaseClient || !els.archiveSidebarList) return;
-            els.archiveSidebarList.innerHTML = `<div class="p-8 text-center"><div class="w-5 h-5 border-2 border-slate-200 border-t-slate-500 rounded-full animate-spin mx-auto"></div></div>`;
-            try {
-                const { data, error } = await supabaseClient.storage.from(BUCKET_NAME).list('public/data', { sortBy: { column: 'created_at', order: 'desc' } });
-                if (error) throw error;
-                
-                els.archiveSidebarList.innerHTML = '';
-                if (data.length === 0 || (data.length === 1 && data[0].name === '.emptyFolderPlaceholder')) {
-                    els.archiveSidebarList.innerHTML = `<p class="text-center text-[10px] text-slate-400 p-4">Arşiv boş.</p>`;
-                    return;
-                }
-
-                data.forEach(file => {
-                    if (file.name === '.emptyFolderPlaceholder') return;
-                    const item = document.createElement('div');
-                    item.className = "p-3 bg-white rounded-xl border border-slate-100 shadow-sm flex items-center justify-between group archive-item-btn";
-                    item.innerHTML = `
-                        <div class="cursor-pointer overflow-hidden flex items-center gap-2 flex-grow" onclick="loadSopData('${file.name}', false, event)">
-                            <div class="w-8 h-8 rounded bg-slate-50 flex items-center justify-center shrink-0 hide-on-collapse"><i data-lucide="file-text" class="w-4 h-4 text-slate-400"></i></div>
-                            <div class="hide-on-collapse overflow-hidden">
-                                <p class="text-[10px] font-bold text-slate-700 truncate w-32 uppercase">${file.name.split('_').slice(2).join(' ').replace('.json','')}</p>
-                                <p class="text-[8px] text-slate-400 uppercase tracking-wide">Bulut Dokümanı</p>
-                            </div>
-                        </div>
-                        <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity hide-on-collapse shrink-0 ml-2">
-                            <button onclick="loadSopData('${file.name}', false, event)" class="p-1.5 text-blue-500 hover:bg-blue-50 rounded" title="Düzenle"><i data-lucide="edit-3" class="w-3.5 h-3.5"></i></button>
-                            <button onclick="event.stopPropagation(); showDeleteConfirm('${file.name}')" class="p-1.5 text-red-500 hover:bg-red-50 rounded" title="Sil"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
-                            <button onclick="loadSopData('${file.name}', true, event)" class="p-1.5 text-[#000080] hover:bg-blue-50 rounded" title="QR Paylaş"><i data-lucide="qr-code" class="w-3.5 h-3.5"></i></button>
-                        </div>`;
-                    els.archiveSidebarList.appendChild(item);
-                });
-                lucide.createIcons();
-            } catch (err) { els.archiveSidebarList.innerHTML = `<p class="text-center text-xs text-red-400 p-4">Veri hatası!</p>`; }
-        }
-
-        async function loadSopData(fileName, onlyQr = false, event = null) {
-            if (event) { event.preventDefault(); event.stopPropagation(); }
-            const currentUrl = BASE_URL || window.location.href.split('?')[0];
-            const qrUrl = `${currentUrl}?view=${fileName}`;
-            
-            if (onlyQr) { 
-                showModal("Paylaşım Paneli", "Operatörün bu QR kodu taratması yeterlidir.", qrUrl, fileName); 
-                return; 
-            }
-            
-            toggleLoading(true, "Doküman Yükleniyor...");
+        async function loadOperatorSop(fileName) {
+            toggleLoading(true, "Operatör görünümü hazırlanıyor...");
             try {
                 const { data, error } = await supabaseClient.storage.from(BUCKET_NAME).download(`public/data/${fileName}`);
                 if (error) throw error;
                 const state = JSON.parse(await data.text());
                 
+                document.getElementById('opSopTitle').innerText = (state.title || "SOP").toUpperCase();
+                document.getElementById('opSopSubtitle').innerText = (state.subtitle || "").toUpperCase();
+                
+                const opMedia = document.getElementById('opMedia');
+                const opStepsList = document.getElementById('opStepsList');
+                opMedia.innerHTML = '';
+                opStepsList.innerHTML = '';
+                
+                state.images.forEach((imgSrc, idx) => {
+                    if (!imgSrc) return;
+                    const container = document.createElement('div');
+                    container.className = "bg-white rounded-2xl overflow-hidden shadow-md border border-slate-200 relative mb-4";
+                    const img = document.createElement('img');
+                    img.src = imgSrc;
+                    img.className = "w-full h-auto block";
+                    container.appendChild(img);
+                    
+                    state.points.filter(p => p.imgIdx === idx).forEach((p, pIdx) => {
+                        const m = document.createElement('div');
+                        m.className = "marker marker-red";
+                        m.style.left = p.px + '%';
+                        m.style.top = p.py + '%';
+                        // Determine visual index based on global points array
+                        m.innerText = window.points.indexOf(p) + 1;
+                        container.appendChild(m);
+                    });
+                    opMedia.appendChild(container);
+                });
+                
+                state.points.forEach((p, idx) => {
+                    const card = document.createElement('div');
+                    card.className = "bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex gap-4 items-start";
+                    card.innerHTML = `
+                        <div class="w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center font-bold shrink-0">${idx + 1}</div>
+                        <p class="text-sm font-medium text-slate-700 pt-1">${p.description || "Açıklama girilmemiş."}</p>
+                    `;
+                    opStepsList.appendChild(card);
+                });
+                
+                els.operatorView.style.display = 'flex';
+                toggleLoading(false);
+                lucide.createIcons();
+            } catch (err) {
+                console.error(err);
+                toggleLoading(false);
+                showModal("Hata", "Operatör görünümü yüklenemedi!");
+            }
+        }
+
+        function showDeleteConfirm(fileName) {
+            deleteTargetFile = fileName;
+            els.confirmModal.classList.remove('hidden');
+            els.confirmModal.classList.add('flex');
+        }
+
+        els.confirmCancel.onclick = () => {
+            deleteTargetFile = null;
+            els.confirmModal.classList.add('hidden');
+            els.confirmModal.classList.remove('flex');
+        };
+
+        els.confirmDelete.onclick = async () => {
+            if (!deleteTargetFile) return;
+            els.confirmModal.classList.add('hidden');
+            els.confirmModal.classList.remove('flex');
+            toggleLoading(true, "Bulut arşivinden siliniyor...");
+            await deleteSopFile(deleteTargetFile);
+            deleteTargetFile = null;
+            toggleLoading(false);
+        };
+
+        async function deleteSopFile(fileName) {
+            try {
+                const jsonPath = `public/data/${fileName}`;
+                const pdfPath = `public/pdfs/${fileName.replace('.json', '.pdf')}`;
+                const { error } = await supabaseClient.storage.from(BUCKET_NAME).remove([jsonPath, pdfPath]);
+                if (error) {
+                    showModal("Hata", "Dosyalar silinemedi: " + error.message);
+                } else {
+                    showModal("Başarılı", "SOP bulut arşivinden tamamen silindi.");
+                    setTimeout(fetchArchive, 500);
+                }
+            } catch (err) {
+                console.error("Silme hatası:", err);
+                showModal("Hata", "İşlem sırasında beklenmedik bir hata oluştu.");
+            }
+        }
+
+        async function fetchArchive() {
+            if (!supabaseClient) return;
+            els.archiveSidebarList.innerHTML = `<div class="p-8 text-center"><div class="w-5 h-5 border-2 border-slate-200 border-t-slate-500 rounded-full animate-spin mx-auto"></div></div>`;
+            try {
+                const { data, error } = await supabaseClient.storage.from(BUCKET_NAME).list('public/data', { sortBy: { column: 'created_at', order: 'desc' } });
+                if (error) throw error;
+                els.archiveSidebarList.innerHTML = '';
+                const validFiles = data.filter(f => f.name.endsWith('.json'));
+                if (validFiles.length === 0) {
+                    els.archiveSidebarList.innerHTML = `<p class="text-center text-[10px] text-slate-400 p-4">Arşiv boş.</p>`;
+                    return;
+                }
+                validFiles.forEach(file => {
+                    const displayTitle = file.name.split('_').slice(2).join(' ').replace('.json','').toUpperCase();
+                    const item = document.createElement('div');
+                    item.className = "p-3 bg-white rounded-xl border border-slate-100 shadow-sm flex items-center justify-between group archive-item-btn";
+                    item.innerHTML = `
+                        <div class="cursor-pointer overflow-hidden flex items-center gap-2 flex-grow" onclick="loadSopData('${file.name}', false)">
+                            <div class="w-8 h-8 rounded bg-slate-50 flex items-center justify-center shrink-0 hide-on-collapse"><i data-lucide="file-text" class="w-4 h-4 text-slate-400"></i></div>
+                            <div class="hide-on-collapse overflow-hidden">
+                                <p class="text-[10px] font-bold text-slate-700 truncate w-32">${displayTitle || 'İSİMSİZ'}</p>
+                                <p class="text-[8px] text-slate-400 uppercase tracking-wide">Bulut Kaydı</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity hide-on-collapse shrink-0 ml-2">
+                            <button onclick="event.stopPropagation(); showDeleteConfirm('${file.name}')" class="p-1.5 text-red-500 hover:bg-red-50 rounded" title="Sil"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                            <button onclick="event.stopPropagation(); loadSopData('${file.name}', true)" class="p-1.5 text-[#000080] hover:bg-blue-50 rounded" title="QR"><i data-lucide="qr-code" class="w-3.5 h-3.5"></i></button>
+                        </div>`;
+                    els.archiveSidebarList.appendChild(item);
+                });
+                lucide.createIcons();
+            } catch (err) { 
+                els.archiveSidebarList.innerHTML = `<p class="text-center text-xs text-red-400 p-4">Yükleme hatası!</p>`; 
+            }
+        }
+
+        async function loadSopData(fileName, onlyQr = false) {
+            const viewId = fileName;
+            if (onlyQr) { 
+                const qrUrl = `${BASE_URL || window.location.href.split('?')[0]}?view=${fileName}`;
+                showModal("QR Kod Paylaşımı", "Operatörün bu dokümana erişmesi için kodu okutun.", qrUrl, fileName); 
+                return; 
+            }
+            toggleLoading(true, "Açılıyor...");
+            try {
+                const { data, error } = await supabaseClient.storage.from(BUCKET_NAME).download(`public/data/${fileName}`);
+                if (error) throw error;
+                const state = JSON.parse(await data.text());
                 els.sopTitleInput.value = state.title || '';
                 els.sopSubtitleInput.value = state.subtitle || '';
-                window.points = state.points || []; 
-                window.arrows = state.arrows || []; 
-                window.warnings = state.warnings || [];
+                window.points = state.points || [];
                 window.images = [null, null];
-                
                 for(let i=0; i<2; i++) { 
                     if(state.images && state.images[i]) { 
                         const img = new Image(); 
@@ -517,86 +475,44 @@
                         window.images[i] = img; 
                     } 
                 }
-                
-                if(state.logo) {
-                    const lImg = new Image(); 
-                    lImg.src = state.logo; 
-                    await new Promise(r => lImg.onload = r); 
-                    window.companyLogo = lImg;
-                    els.logoPreview.src = state.logo; 
-                    els.logoPreview.classList.remove('hidden');
-                    els.logoPlaceholder.classList.add('hidden');
-                } else {
-                    window.companyLogo = null;
-                    els.logoPreview.classList.add('hidden');
-                    els.logoPlaceholder.classList.remove('hidden');
-                }
-                
                 window.activeIdx = 0; 
                 renderAll(); 
-                renderWarnings(); 
                 toggleLoading(false);
-            } catch (err) { toggleLoading(false); alert("Dosya okuma hatası!"); }
+            } catch (err) { toggleLoading(false); showModal("Hata", "Doküman yüklenemedi!"); }
         }
 
         function renderAll() {
             const img = window.images[window.activeIdx];
-            if (img && els.mainCanvas && ctx) {
+            if (img && ctx) {
                 els.uploadArea.classList.add('hidden'); 
                 els.editorArea.classList.remove('hidden');
                 els.mainCanvas.width = 1200; 
                 els.mainCanvas.height = img.height * (1200 / img.width);
                 ctx.drawImage(img, 0, 0, 1200, els.mainCanvas.height);
-                window.arrows.forEach(a => { 
-                    if (a.imgIdx === window.activeIdx) 
-                        drawArrowHead(ctx, (a.x1/100)*1200, (a.y1/100)*els.mainCanvas.height, (a.x2/100)*1200, (a.y2/100)*els.mainCanvas.height, a.color); 
-                });
             } else { 
                 els.uploadArea.classList.remove('hidden'); 
                 els.editorArea.classList.add('hidden'); 
             }
-            
             els.markersOverlay.innerHTML = ''; 
             els.tableBody.innerHTML = '';
-            let ic = 0;
-            
+            let count = 0;
             window.points.forEach((p, idx) => {
-                if (p.type === 'red' || (p.isManual && !p.isSilent)) ic++;
-                if (p.imgIdx === window.activeIdx && !p.isManual) {
+                if (p.imgIdx === window.activeIdx) {
+                    count++;
                     const m = document.createElement('div');
-                    m.className = p.type === 'operator' ? 'marker-operator' : `marker marker-${p.type || 'red'}`;
-                    m.innerHTML = p.type === 'operator' ? `<i data-lucide="user" class="w-3 h-3"></i> OPERATÖR` : (p.isSilent ? '' : ic);
+                    m.className = `marker marker-red`;
+                    m.innerHTML = count;
                     m.style.left = p.px + '%'; 
                     m.style.top = p.py + '%';
                     m.onclick = (ev) => { ev.stopPropagation(); window.points.splice(idx, 1); renderAll(); };
                     els.markersOverlay.appendChild(m);
-                }
-                if ((p.type === 'red' || p.isManual)) {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `<td class="py-2 px-1"><span class="w-5 h-5 rounded-full flex items-center justify-center font-bold text-white text-[9px] ${p.isManual ? 'bg-blue-600' : 'bg-red-500'}">${ic}</span></td><td class="py-2"><textarea class="w-full bg-transparent text-xs outline-none font-medium text-slate-700" rows="1" oninput="window.points[${idx}].description=this.value" placeholder="Adım açıklaması...">${p.description || ''}</textarea></td><td class="py-2 text-right"><button onclick="window.points.splice(${idx}, 1); renderAll();" class="text-slate-300 hover:text-red-500"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button></td>`;
-                    els.tableBody.appendChild(tr);
+                    const row = document.createElement('div');
+                    row.className = "flex items-center gap-3 p-2 bg-slate-50 rounded-lg border border-slate-100";
+                    row.innerHTML = `<span class="bg-red-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0">${count}</span><input class="w-full bg-transparent text-xs outline-none" value="${p.description || ''}" oninput="window.points[${idx}].description=this.value" placeholder="Açıklama...">`;
+                    els.tableBody.appendChild(row);
                 }
             });
-            els.emptyTableState.classList.toggle('hidden', ic > 0); 
-            lucide.createIcons();
-        }
-
-        function drawArrowHead(ctx, fx, fy, tx, ty, color) { 
-            const headlen = 25; 
-            const angle = Math.atan2(ty - fy, tx - fx); 
-            ctx.beginPath(); 
-            ctx.strokeStyle = color; 
-            ctx.lineWidth = 6; 
-            ctx.moveTo(fx, fy); 
-            ctx.lineTo(tx, ty); 
-            ctx.stroke(); 
-            ctx.beginPath(); 
-            ctx.fillStyle = color; 
-            ctx.moveTo(tx, ty); 
-            ctx.lineTo(tx - headlen * Math.cos(angle - Math.PI/6), ty - headlen * Math.sin(angle - Math.PI/6)); 
-            ctx.lineTo(tx - headlen * Math.cos(angle + Math.PI/6), ty - headlen * Math.sin(angle + Math.PI/6)); 
-            ctx.closePath(); 
-            ctx.fill(); 
+            els.emptyTableState.classList.toggle('hidden', count > 0); 
         }
 
         function showModal(title, msg, qr = null, viewId = null) {
@@ -605,51 +521,49 @@
             els.qrSection.classList.toggle('hidden', !qr);
             if (qr) {
                 els.qrContainer.innerHTML = '';
-                new QRCode(els.qrContainer, { text: qr, width: 256, height: 256, colorDark: "#000080" });
-                els.qrTitleText.innerText = (els.sopTitleInput.value || "SOP").toUpperCase();
+                new QRCode(els.qrContainer, { text: qr, width: 200, height: 200 });
+                els.qrTitleText.innerText = (els.sopTitleInput.value || "DOKÜMAN").toUpperCase();
+                
+                if (els.openLinkBtn) {
+                    els.openLinkBtn.onclick = () => {
+                        if (viewId) { loadOperatorSop(viewId); els.customModal.classList.add('hidden'); }
+                    };
+                }
+                if (els.downloadQrBtn) {
+                    els.downloadQrBtn.onclick = () => {
+                        const qrImg = els.qrContainer.querySelector('img');
+                        if (qrImg) {
+                            const link = document.createElement('a');
+                            link.download = `QR_${els.sopTitleInput.value || 'SOP'}.png`;
+                            link.href = qrImg.src;
+                            link.click();
+                        }
+                    };
+                }
             }
             els.customModal.classList.remove('hidden'); 
             els.customModal.classList.add('flex');
-            
-            if (els.openLinkBtn) {
-                els.openLinkBtn.onclick = () => {
-                    if (viewId) { loadOperatorSop(viewId); els.customModal.classList.add('hidden'); }
-                };
-            }
         }
 
-        if (els.loginForm) {
-            els.loginForm.onsubmit = (e) => {
-                e.preventDefault();
-                if (document.getElementById('usernameInput').value === ADMIN_U && document.getElementById('passwordInput').value === ADMIN_P) {
-                    els.loginScreen.style.display = 'none';
-                    els.mainApp.style.opacity = '1'; 
-                    els.mainApp.classList.remove('pointer-events-none');
-                    fetchArchive();
-                } else { document.getElementById('loginError').classList.remove('hidden'); }
-            };
-        }
+        els.loginForm.onsubmit = (e) => {
+            e.preventDefault();
+            if (document.getElementById('usernameInput').value === ADMIN_U && document.getElementById('passwordInput').value === ADMIN_P) {
+                els.loginScreen.style.display = 'none';
+                els.mainApp.style.opacity = '1'; 
+                els.mainApp.classList.remove('pointer-events-none');
+                fetchArchive();
+            } else { document.getElementById('loginError').classList.remove('hidden'); }
+        };
 
-        if (els.mainCanvas) {
-            els.mainCanvas.onclick = (e) => {
-                if (!window.images[window.activeIdx]) return;
-                const rect = els.mainCanvas.getBoundingClientRect();
-                const px = ((e.clientX - rect.left) / rect.width) * 100, py = ((e.clientY - rect.top) / rect.height) * 100;
-                if (window.currentMode === 'arrow') {
-                    if (!window.tempArrowStart) window.tempArrowStart = { px, py };
-                    else { 
-                        window.arrows.push({ x1: window.tempArrowStart.px, y1: window.tempArrowStart.py, x2: px, y2: py, color: (window.lastColor === 'blue' ? '#3b82f6' : window.lastColor === 'green' ? '#22c55e' : '#ef4444'), imgIdx: window.activeIdx }); 
-                        window.tempArrowStart = null; 
-                        renderAll(); 
-                    }
-                } else { 
-                    window.points.push({ px, py, description: '', type: window.currentMode, isSilent: window.currentMode !== 'red', imgIdx: window.activeIdx, isManual: false }); 
-                    renderAll(); 
-                }
-            };
-        }
+        els.mainCanvas.onclick = (e) => {
+            if (!window.images[window.activeIdx]) return;
+            const rect = els.mainCanvas.getBoundingClientRect();
+            const px = ((e.clientX - rect.left) / rect.width) * 100, py = ((e.clientY - rect.top) / rect.height) * 100;
+            window.points.push({ px, py, description: '', imgIdx: window.activeIdx }); 
+            renderAll();
+        };
 
-        if (els.fileInput) els.fileInput.onchange = (e) => {
+        els.fileInput.onchange = (e) => {
             const f = e.target.files[0];
             if(!f) return;
             const r = new FileReader();
@@ -661,88 +575,42 @@
             r.readAsDataURL(f);
         };
 
-        if (els.exportSupabaseBtn) els.exportSupabaseBtn.onclick = async () => {
+        els.exportSupabaseBtn.onclick = async () => {
+            if (!els.sopTitleInput.value) { showModal("Eksik Bilgi", "Lütfen bir SOP başlığı girin."); return; }
             toggleLoading(true, "Buluta Kaydediliyor...");
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF();
-            pdf.text("ELDOR SOP", 10, 10);
-            
             const timestamp = Date.now();
             const safeTitle = (els.sopTitleInput.value || 'untitled').replace(/[^a-z0-9]/gi, '_').toLowerCase();
             const fileName = `SOP_${timestamp}_${safeTitle}.json`;
-            
             const state = { 
                 title: els.sopTitleInput.value, 
                 subtitle: els.sopSubtitleInput.value, 
                 points: window.points, 
-                arrows: window.arrows, 
-                warnings: window.warnings, 
-                images: window.images.map(img => img ? img.src : null), 
-                logo: window.companyLogo ? window.companyLogo.src : null 
+                images: window.images.map(img => img ? img.src : null)
             };
-            
             try {
                 await supabaseClient.storage.from(BUCKET_NAME).upload(`public/data/${fileName}`, new Blob([JSON.stringify(state)], { type: 'application/json' }));
-                await supabaseClient.storage.from(BUCKET_NAME).upload(`public/pdfs/${fileName.replace('.json','.pdf')}`, pdf.output('blob'));
-                
                 toggleLoading(false);
-                const currentUrl = BASE_URL || window.location.href.split('?')[0];
-                showModal("Kaydedildi", "Dijital SOP artık yayında.", `${currentUrl}?view=${fileName}`, fileName);
+                const qrUrl = `${BASE_URL || window.location.href.split('?')[0]}?view=${fileName}`;
+                showModal("Kaydedildi", "Yeni SOP arşive eklendi.", qrUrl, fileName);
                 fetchArchive();
-            } catch (err) { toggleLoading(false); alert("Bulut Kayıt Hatası!"); }
+            } catch (err) { toggleLoading(false); showModal("Hata", "Kayıt sırasında hata oluştu."); }
         };
 
-        if (els.modalClose) els.modalClose.onclick = () => els.customModal.classList.add('hidden');
-        if (els.refreshArchiveBtn) els.refreshArchiveBtn.onclick = fetchArchive;
-        if (els.resetBtn) els.resetBtn.onclick = () => { if(confirm("Tüm formu temizlemek istediğinize emin misiniz?")) { window.points=[]; window.images=[null,null]; window.warnings=[]; window.arrows=[]; renderAll(); } };
-        
-        Object.keys(els.toolBtns).forEach(k => {
-            els.toolBtns[k].onclick = () => {
-                window.currentMode = k;
-                if(k !== 'arrow' && k !== 'operator') window.lastColor = k;
-                Object.values(els.toolBtns).forEach(b => b.classList.remove('active'));
-                els.toolBtns[k].classList.add('active');
-            };
-        });
-
+        els.modalClose.onclick = () => els.customModal.classList.add('hidden');
+        els.refreshArchiveBtn.onclick = fetchArchive;
+        els.sidebarToggle.onclick = () => els.sidebar.classList.toggle('collapsed');
         els.tabBtns.forEach((btn, idx) => {
-            btn.onclick = () => {
+            if (btn) btn.onclick = () => {
                 window.activeIdx = idx;
-                els.tabBtns.forEach((b, i) => b.classList.toggle('active', i === idx));
+                els.tabBtns.forEach((b, i) => { if(b) b.classList.toggle('active', i === idx) });
                 renderAll();
             };
         });
 
-        window.onload = initApp;
-        
         function clearCurrentImage() { window.images[window.activeIdx] = null; renderAll(); }
-        function openCropModal() { 
-            const img = window.images[window.activeIdx];
-            if(!img) return;
-            els.cropModalImage.src = img.src;
-            els.cropModal.classList.remove('hidden');
-            els.cropModal.classList.add('flex');
-            if(cropper) cropper.destroy();
-            cropper = new Cropper(els.cropModalImage, { viewMode: 1 });
-        }
-        function closeCropModal() { els.cropModal.classList.add('hidden'); }
-        function applyCrop() { 
-            const croppedImg = new Image();
-            croppedImg.onload = () => { window.images[window.activeIdx] = croppedImg; renderAll(); closeCropModal(); };
-            croppedImg.src = cropper.getCroppedCanvas().toDataURL();
-        }
         function exitOperatorView() { els.operatorView.style.display = 'none'; }
-        function renderWarnings() {
-            els.warningsContainer.innerHTML = '';
-            window.warnings.forEach((w, i) => {
-                const d = document.createElement('div');
-                d.className = "flex gap-2 bg-red-50 p-2 rounded-xl border border-red-100";
-                d.innerHTML = `<textarea class="flex-grow bg-transparent text-xs outline-none text-red-700 font-medium" oninput="window.warnings[${i}].text=this.value" placeholder="Uyarı...">${w.text}</textarea><button onclick="window.warnings.splice(${i}, 1); renderWarnings();" class="text-red-300 font-bold">&times;</button>`;
-                els.warningsContainer.appendChild(d);
-            });
-        }
-        els.addWarningBtn.onclick = () => { window.warnings.push({ text: '' }); renderWarnings(); };
-        els.addManualBtn.onclick = () => { window.points.push({ px: null, py: null, description: '', type: 'red', isSilent: false, imgIdx: -1, isManual: true }); renderAll(); };
+        
+        window.onload = initApp;
     </script>
 </body>
 </html>
