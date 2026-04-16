@@ -39,7 +39,7 @@
         @media (max-width: 768px) {
             .sidebar { position: fixed; z-index: 50; height: 100%; transform: translateX(-100%); }
             .sidebar.active { transform: translateX(0); }
-            .sidebar.collapsed { width: 320px; } /* Mobile always full when active */
+            .sidebar.collapsed { width: 320px; } 
             .sidebar.collapsed .hide-on-collapse { display: block; }
             .main-content { padding: 1rem; }
         }
@@ -80,7 +80,7 @@
         <header class="bg-[#000080] text-white p-4 sticky top-0 z-50 flex items-center justify-between shadow-lg">
             <div class="flex items-center gap-3">
                 <div id="opLogoContainer" class="w-10 h-10 bg-white rounded-lg p-1 flex items-center justify-center">
-                    <!-- Dynamic Logo -->
+                    <!-- Dynamic Logo Container -->
                 </div>
                 <div>
                     <h1 id="opSopTitle" class="font-bold text-sm leading-tight uppercase">LOADING SOP...</h1>
@@ -132,6 +132,21 @@
         <p class="font-bold text-[#000080] text-lg" id="loadingText">Loading...</p>
     </div>
 
+    <!-- Confirmation Modal (Delete) -->
+    <div id="confirmModal" class="fixed inset-0 bg-black/60 z-[9900] hidden items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-8 shadow-2xl text-center">
+            <div class="w-16 h-16 bg-red-50 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i data-lucide="trash-2" class="w-8 h-8"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-2 text-slate-900">Are you sure?</h3>
+            <p class="text-slate-500 mb-8 text-sm">This action will permanently delete the document from the cloud archive.</p>
+            <div class="flex gap-3">
+                <button id="confirmCancel" class="flex-grow py-4 bg-slate-100 text-slate-700 rounded-2xl font-bold">Cancel</button>
+                <button id="confirmDelete" class="flex-grow py-4 bg-red-600 text-white rounded-2xl font-bold shadow-lg shadow-red-200">Delete</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Share Modal -->
     <div id="customModal" class="fixed inset-0 bg-black/60 z-[9500] hidden items-center justify-center p-4 backdrop-blur-md">
         <div class="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl text-center">
@@ -180,7 +195,7 @@
         <aside id="sidebar" class="sidebar">
             <div class="p-6 border-b flex items-center justify-between bg-slate-50/50">
                 <div class="flex items-center gap-3 center-on-collapse">
-                    <div id="sidebarToggle" class="w-8 h-8 bg-[#000080] rounded-lg flex items-center justify-center cursor-pointer shadow-lg active:scale-95 transition-transform">
+                    <div id="sidebarToggle" class="w-8 h-8 bg-[#000080] rounded-lg flex items-center justify-center cursor-pointer shadow-lg active:scale-95 transition-transform" title="Toggle Archive Panel">
                         <i data-lucide="layers" class="w-4 h-4 text-white"></i>
                     </div>
                     <h2 class="font-bold text-slate-800 tracking-tight hide-on-collapse">SOP Archive</h2>
@@ -188,7 +203,7 @@
                 <button id="refreshArchiveBtn" class="p-2 hover:bg-slate-200 rounded-lg text-slate-500 hide-on-collapse" title="Refresh Archive"><i data-lucide="rotate-cw" class="w-4 h-4"></i></button>
             </div>
             <div id="archiveSidebarList" class="flex-grow overflow-y-auto p-2 space-y-1">
-                <!-- List items -->
+                <!-- Archive items list -->
             </div>
             <div class="p-4 border-t bg-white">
                 <div class="bg-blue-50 p-3 rounded-xl flex items-center gap-3 center-on-collapse">
@@ -226,7 +241,7 @@
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <!-- Editor -->
+                    <!-- Editor Area -->
                     <div class="lg:col-span-2 space-y-6">
                         <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
                             <div class="flex border-b border-slate-100 mb-6 gap-6">
@@ -241,11 +256,11 @@
                             <div id="editorArea" class="hidden space-y-4">
                                 <div class="flex flex-wrap items-center justify-between gap-3 bg-slate-50 p-3 rounded-xl border">
                                     <div class="flex gap-1.5">
-                                        <button id="toolRed" class="tool-btn active p-2 rounded-lg border bg-white shadow-sm" title="Step"><div class="w-4 h-4 rounded-full bg-red-500"></div></button>
+                                        <button id="toolRed" class="tool-btn active p-2 rounded-lg border bg-white shadow-sm" title="Step Pointer"><div class="w-4 h-4 rounded-full bg-red-500"></div></button>
                                         <button id="toolBlue" class="tool-btn p-2 rounded-lg border bg-white shadow-sm" title="Blue Info"><div class="w-4 h-4 rounded-full bg-blue-500"></div></button>
                                         <button id="toolGreen" class="tool-btn p-2 rounded-lg border bg-white shadow-sm" title="Green OK"><div class="w-4 h-4 rounded-full bg-green-500"></div></button>
                                         <button id="toolArrow" class="tool-btn p-2 rounded-lg border bg-white shadow-sm" title="Arrow"><i data-lucide="arrow-up-right" class="w-4 h-4 text-slate-600"></i></button>
-                                        <button id="toolOperator" class="tool-btn p-2 rounded-lg border bg-white shadow-sm" title="Operator"><i data-lucide="user" class="w-4 h-4 text-slate-600"></i></button>
+                                        <button id="toolOperator" class="tool-btn p-2 rounded-lg border bg-white shadow-sm" title="Operator Position"><i data-lucide="user" class="w-4 h-4 text-slate-600"></i></button>
                                     </div>
                                     <div class="flex gap-2">
                                         <button onclick="openCropModal()" class="px-3 py-2 text-[11px] font-bold text-blue-600 bg-white border rounded-lg">Crop</button>
@@ -260,7 +275,7 @@
                         </div>
                     </div>
 
-                    <!-- Steps & Warnings -->
+                    <!-- Side Panels -->
                     <div class="space-y-6">
                         <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm h-[400px] flex flex-col">
                             <div class="flex items-center justify-between mb-4">
@@ -286,7 +301,7 @@
     </div>
 
     <script>
-        // --- BASE LOGIC ---
+        // --- CONSTANTS ---
         const BASE_URL = window.location.href.split('?')[0].includes('blob') ? '' : window.location.href.split('?')[0];
         const SUPABASE_URL = 'https://rqfvepaidqmagxymjajp.supabase.co'; 
         const SUPABASE_ANON_KEY = 'sb_publishable_JpwitHutc1HlchWlUkqnEg_ySn75yNM';
@@ -294,6 +309,7 @@
 
         let supabaseClient = null;
         let cropper = null;
+        let deleteTargetFile = null;
         
         window.activeIdx = 0; 
         window.images = [null, null]; 
@@ -333,6 +349,9 @@
             loading: document.getElementById('loading'),
             loadingText: document.getElementById('loadingText'),
             customModal: document.getElementById('customModal'),
+            confirmModal: document.getElementById('confirmModal'),
+            confirmDelete: document.getElementById('confirmDelete'),
+            confirmCancel: document.getElementById('confirmCancel'),
             cropModal: document.getElementById('cropModal'),
             cropModalImage: document.getElementById('cropModalImage'),
             modalTitle: document.getElementById('modalTitle'),
@@ -360,7 +379,7 @@
 
         const ctx = els.mainCanvas ? els.mainCanvas.getContext('2d') : null;
 
-        // SIDEBAR TOGGLE LOGIC
+        // --- SIDEBAR TOGGLE ---
         if (els.sidebarToggle) {
             els.sidebarToggle.onclick = () => {
                 els.sidebar.classList.toggle('collapsed');
@@ -387,6 +406,28 @@
             if (!els.loading) return;
             els.loadingText.innerText = text;
             els.loading.classList.toggle('active', show);
+        }
+
+        // --- DELETE CONFIRMATION LOGIC ---
+        function showDeleteConfirm(fileName) {
+            deleteTargetFile = fileName;
+            if (els.confirmModal) els.confirmModal.classList.replace('hidden', 'flex');
+        }
+
+        if (els.confirmCancel) {
+            els.confirmCancel.onclick = () => {
+                deleteTargetFile = null;
+                if (els.confirmModal) els.confirmModal.classList.replace('flex', 'hidden');
+            };
+        }
+
+        if (els.confirmDelete) {
+            els.confirmDelete.onclick = async () => {
+                if (!deleteTargetFile) return;
+                if (els.confirmModal) els.confirmModal.classList.replace('flex', 'hidden');
+                await deleteSopFile(deleteTargetFile);
+                deleteTargetFile = null;
+            };
         }
 
         async function loadOperatorSop(fileName) {
@@ -506,7 +547,7 @@
                         </div>
                         <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity hide-on-collapse">
                             <button onclick="loadSopData('${file.name}', false, event)" class="p-1.5 text-blue-500 hover:bg-blue-50 rounded" title="Edit"><i data-lucide="edit-3" class="w-3.5 h-3.5"></i></button>
-                            <button onclick="deleteSopFile('${file.name}', event)" class="p-1.5 text-red-500 hover:bg-red-50 rounded" title="Delete"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                            <button onclick="event.stopPropagation(); showDeleteConfirm('${file.name}')" class="p-1.5 text-red-500 hover:bg-red-50 rounded" title="Delete"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
                             <button onclick="loadSopData('${file.name}', true, event)" class="p-1.5 text-[#000080] hover:bg-blue-50 rounded" title="Share QR"><i data-lucide="qr-code" class="w-3.5 h-3.5"></i></button>
                         </div>`;
                     els.archiveSidebarList.appendChild(item);
@@ -560,16 +601,23 @@
             } catch (err) { toggleLoading(false); alert("Upload Error!"); }
         }
 
-        async function deleteSopFile(fileName, event = null) {
-            if (event) { event.preventDefault(); event.stopPropagation(); }
-            if(!confirm("Are you sure you want to delete this document permanently?")) return;
+        async function deleteSopFile(fileName) {
             toggleLoading(true, "Deleting...");
             try {
                 const pdfName = fileName.replace('.json', '.pdf');
-                await supabaseClient.storage.from(BUCKET_NAME).remove([`public/data/${fileName}`, `public/pdfs/${pdfName}`]);
+                // Construct full paths relative to bucket root
+                const pathsToDelete = [`public/data/${fileName}`, `public/pdfs/${pdfName}`];
+                
+                const { error } = await supabaseClient.storage.from(BUCKET_NAME).remove(pathsToDelete);
+                if (error) throw error;
+                
                 toggleLoading(false);
-                fetchArchive();
-            } catch (err) { toggleLoading(false); alert("Delete failed."); }
+                fetchArchive(); 
+            } catch (err) { 
+                console.error("Supabase delete error:", err);
+                toggleLoading(false); 
+                alert("Delete failed: " + (err.message || "Unknown error")); 
+            }
         }
 
         function showModal(title, msg, qr = null, viewId = null) {
@@ -610,13 +658,18 @@
                 if (els.copyLinkBtn) els.copyLinkBtn.onclick = () => { const el = document.createElement('textarea'); el.value = qr; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el); alert("Link copied!"); };
                 if (els.openLinkBtn) els.openLinkBtn.onclick = () => { if (viewId) { loadOperatorSop(viewId); els.customModal.classList.add('hidden'); els.customModal.classList.remove('flex'); } };
             }
-            els.customModal.classList.remove('hidden'); els.customModal.classList.add('flex');
+            if (els.customModal) {
+                els.customModal.classList.remove('hidden'); 
+                els.customModal.classList.add('flex');
+            }
         }
 
         if (els.modalClose) {
             els.modalClose.onclick = () => {
-                els.customModal.classList.add('hidden');
-                els.customModal.classList.remove('flex');
+                if (els.customModal) {
+                    els.customModal.classList.add('hidden');
+                    els.customModal.classList.remove('flex');
+                }
             };
         }
 
